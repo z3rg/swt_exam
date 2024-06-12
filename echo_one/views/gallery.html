@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gallery</title>
+    <link rel="stylesheet" href="/public/styles.css">
+</head>
+<body>
+    <h1>Your Gallery</h1>
+    <nav>
+        <a href="/index.html">Home</a> | 
+        <a href="#" id="logout">Logout</a>
+    </nav>
+    <div id="gallery"></div>
+    <form id="uploadForm" enctype="multipart/form-data">
+        <input type="file" name="image" accept="image/*">
+        <button type="submit">Upload</button>
+    </form>
+    <script>
+        //-------upload-----------------------------------------------------------------
+        document.getElementById('uploadForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const response = await fetch('/api/user/upload', {
+                method: 'POST',
+                headers: {
+                    'Authorization': localStorage.getItem('token')
+                },
+                body: formData
+            });
+            const result = await response.json();
+            if (response.ok) {
+                alert('Image uploaded successfully');
+                fetchGallery();
+            } else {
+                alert(result.message);
+            }
+        });
+        //------end upload----------------------------------------------------------------
+
+        //------fetch gallery-------------------------------------------------------------
+        async function fetchGallery() {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                alert('You must be logged in to view this page');
+                window.location.href = '/login.html';
+                return;
+            }
+            const response = await fetch('/api/user/gallery', {
+                headers: {
+                    'Authorization': token
+                } 
+            });
+            //console.log(token);
+            if (response.status === 401 || response.status === 400) {
+                alert('Session expired. Please login again.');
+                localStorage.removeItem('token');
+                window.location.href = '/login.html';
+                return;
+            }
+            const images = await response.json();
+            //console.log(images.Authorization);
+            const gallery = document.getElementById('gallery');
+            gallery.innerHTML = images.map(image => `
+                <div>
+                    <img src="/api/user/image/${image.filename}" alt="${image.filename}" onclick="viewImage('${image.filename}')">
+                    <button onclick="deleteImage(${image.id})">Delete</button>
+                </div>
+            `).join('');
+            //alert(response.json().Authorization);
+            //<img src="/api/user/image/${image.filename}" alt="${image.filename}" onclick="viewImage('${image.filename}')">
+                     
+        }
+        //------end fetch gallery-------------------------------------------------------------
+        
+
+        //--------------------------add img on the fly will implement---------------------------------------
+        async function displayProtectedImage(
+        imageId, imageUrl, authToken
+        ) {
+        // Fetch the image.
+        const response = await fetchWithAuthentication(
+            imageUrl, authToken
+        );
+
+        // Create an object URL from the data.
+        const blob = await response.blob();
+        const objectUrl = URL.createObjectURL(blob);
+
+        // Update the source of the image.
+        const imageElement = getElementById(imageId);
+        imageElement.src = objectUrl;
+        imageElement.onload = () => URL.revokeObjectUrl(objectUrl);
+        };
+        //--------------------------end add img on the fly will implement---------------------------------------
+
+        //----------still working function -------------------
+        async function viewImageList(filename) {
+            const token = localStorage.getItem('token');
+            const response = await fetch(`/api/user/image/${filename}`, {
+                headers: {
+                    'Authorization': token
+                }
+            });
+            const blob = await response.blob();
+            const url = URL.createObjectURL(blob);
+            return url;
+        }
+        //----------still working function -------------------
+
+        //----------view image---------------------------------
+        async function viewImage(filename) {
+            const token = localStorage.getItem('token');
+            const response = await fetch(`/api/user/image/${filename}`, {
+                headers: {
+                    'Authorization': token
+                }
+            });
+            const blob = await response.blob();
+            const url = URL.createObjectURL(blob);
+            const imgWindow = window.open(url, '_blank');
+            imgWindow.focus();
+        }
+        //----------end view image---------------------------------
+        
+        //----------delete image---------------------------------
+        async function deleteImage(imageId) {
+            const token = localStorage.getItem('token');
+            const response = await fetch(`/api/user/delete/${imageId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': token
+                }
+            });
+            if (response.ok) {
+                alert('Image deleted successfully');
+                fetchGallery();
+            } else {
+                const result = await response.json();
+                alert(result.message);
+            }
+        }
+        //----------end delete image---------------------------------
+        
+        //----------logout---------------------------------
+        document.getElementById('logout').addEventListener('click', () => {
+            localStorage.removeItem('token');
+            window.location.href = '/index.html';
+        });
+        //----------end logout---------------------------------
+        
+        //----------call fetch Gallery---------------------------------
+        fetchGallery();
+        //----------end call fetch Gallery---------------------------------
+        
+        // Auto-logout after 1 minute
+        setTimeout(() => {
+            alert('Session expired. Please login again.');
+            localStorage.removeItem('token');
+            window.location.href = '/index.html';
+        }, 60000);
+        // End Auto-logout after 1 minute
+    </script>
+</body>
+</html>
