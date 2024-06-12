@@ -8,17 +8,38 @@
 </head>
 <body>
     <h1>Login</h1>
+    <hr/>
     <nav>
         <a href="/index.html">Home</a> | 
         <a href="/register.html">Register</a>
     </nav>
+    <hr/>
     <form id="loginForm">
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="username" required>
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required>
-        <button type="submit">Login</button>
+        <table>
+            <tr>
+                <td>
+                    <label for="username">Username:</label>
+                </td>   
+                <td>
+                    <input type="text" id="username" name="username" required>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="password">Password:</label>
+                </td>
+                <td>
+                    <input type="password" id="password" name="password" required>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <button type="submit">Login</button>
+                </td>
+            </tr>
+        </table>    
     </form>
+    
     <script>
         document.getElementById('loginForm').addEventListener('submit', async (e) => {
             e.preventDefault();

@@ -8,15 +8,21 @@
 </head>
 <body>
     <h1>Your Gallery</h1>
+    <hr/>
     <nav>
         <a href="/index.html">Home</a> | 
         <a href="#" id="logout">Logout</a>
     </nav>
-    <div id="gallery"></div>
+    <hr/>
+    <h3>Upload here..</h3>
+    <hr/>
     <form id="uploadForm" enctype="multipart/form-data">
         <input type="file" name="image" accept="image/*">
         <button type="submit">Upload</button>
     </form>
+    <hr/>
+    <div id="gallery"></div>
+    
     <script>
         document.getElementById('uploadForm').addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -59,8 +65,8 @@
             const gallery = document.getElementById('gallery');
             gallery.innerHTML = images.map(image => `
                 <div>
-                    <img src="/public/images/${image.filename}" alt="${image.filename}">
-                    <button onclick="deleteImage(${image.id})">Delete</button>
+                    <img src="/public/images/${image.filename}" alt="${image.filename}" width="200" height="200">
+                    <br/><button onclick="deleteImage(${image.id})">Delete</button>
                 </div>
             `).join('');
         }

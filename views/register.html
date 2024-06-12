@@ -8,19 +8,46 @@
 </head>
 <body>
     <h1>Register</h1>
+    <hr/>
     <nav>
         <a href="/index.html">Home</a> | 
         <a href="/login.html">Login</a>
     </nav>
+    <hr/>
     <form id="registerForm">
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="username" required>
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" required>
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required>
-        <button type="submit">Register</button>
+        <table>
+        <tr>
+            <td>
+                <label for="username">Username:</label>
+            </td>
+            <td>
+                <input type="text" id="username" name="username" required>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label for="email">Email:</label>
+            </td>
+            <td>
+                <input type="email" id="email" name="email" required>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label for="password">Password:</label>
+            </td>
+            <td>
+                <input type="password" id="password" name="password" required>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <button type="submit">Register</button>
+            </td>        
+        </tr>
+        </table>
     </form>
+    
     <script>
         document.getElementById('registerForm').addEventListener('submit', async (e) => {
             e.preventDefault();
