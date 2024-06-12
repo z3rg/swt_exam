@@ -10,3 +10,4 @@
 10. Keamanan yang di terapkan sangatlah minim karena masih possible untuk menggunkan barrer.
 11. Ada 1 folder bernama Echo_one itu poc untuk jwt basis sehingga user tidak dapat mengakses file secara langsung cara deploynya sama hanya halaman gallery nya masih bugging (image kalau tidak diklik tidak muncul) karena token authorization nya tidak ikut terbawa ke variable image, sebetulnya masih bisa dibuat workaroundnya hanya waktu saya harus dibagi dengan yang lain.
 12. Ada pertanyaan? silahkan kontak saya.
+13. [!]perhatian[!], jangan pernah men deploy ke production karena mengandung koding yang experimental dan unfinal.
